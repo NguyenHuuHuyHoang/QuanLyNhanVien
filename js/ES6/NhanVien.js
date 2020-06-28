@@ -4,15 +4,14 @@ class NhanVien {
         this.hoTen = hoTen;
         this.email = email;
         this.matKhau = matKhau;
-        this.ngayLamVien = ngayLamViec;
+        this.ngayLamViec = ngayLamViec;
         this.chucVu = chucVu;
 
         this.mangDoiChieu = [
             this.maNV,
             this.hoTen,
             this.email,
-            this.matKhau,
-            this.ngayLamVien,
+            this.ngayLamViec,
             this.chucVu
         ]
     }
