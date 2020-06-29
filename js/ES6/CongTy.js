@@ -50,4 +50,25 @@ class CongTy {
          }
          return dskq;
      }
+
+     //Sap xep nhan vien theo ma nhan vien: tang dan + giam dan
+     SapXepNhanVien(type) {
+         if (type === 1) {
+            this.danhSachNhanVien.sort((a, b) => { //Tăng dần
+                let x = a.maNV.toLowerCase();
+                let y = b.maNV.toLowerCase();
+                if ( x < y ) {return -1;}
+                if (x > y) {return 1;}
+                return 0;
+            })
+         } else {
+            this.danhSachNhanVien.sort((a, b) => { //Giảm dần
+                let x = a.maNV.toLowerCase();
+                let y = b.maNV.toLowerCase();
+                if ( x > y ) {return -1;}
+                if (x < y) {return 1;}
+                return 0;
+            })
+         }
+     }
 }

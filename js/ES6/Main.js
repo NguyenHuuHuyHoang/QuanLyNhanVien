@@ -170,5 +170,31 @@ getEle('btnCapNhat').addEventListener('click', () =>{
     HienThiDanhSach(congty.danhSachNhanVien);
 })
 
+// Tim nhan vien theo ten
+getEle('searchName').addEventListener('keyup', () => {
+  let tuKhoa = getEle('searchName').value;
+  let dskq = congty.TimNhanVienTheoTen(tuKhoa);
+
+  HienThiDanhSach(dskq.danhSachNhanVien);
+})
+
+//Sap xep nhan vien
+getEle('SapXepTang').addEventListener('click', ()=>{
+  getEle('SapXepTang').style.display = "none";
+  getEle('SapXepGiam').style.display = "inline";
+  congty.SapXepNhanVien(1);
+  HienThiDanhSach(congty.danhSachNhanVien);
+
+})
+
+getEle('SapXepGiam').addEventListener('click', ()=>{
+  getEle('SapXepGiam').style.display = "none";
+  getEle('SapXepTang').style.display = "inline";
+  congty.SapXepNhanVien(-1);
+  HienThiDanhSach(congty.danhSachNhanVien);
+
+})
+
+
 //Hiển thị dnah sách ra ngoài man hình
 HienThiDanhSach(congty.danhSachNhanVien);
