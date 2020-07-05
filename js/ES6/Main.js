@@ -16,9 +16,19 @@ var nhanVienMoi1 = new NhanVien(
   "10/10/2017",
   2
 );
+
+var nhanVienMoi3 = new NhanVien(
+  "ac",
+  "nguyen van b",
+  "nguyenvanb@gmail.com",
+  "12343242",
+  "10/10/2017",
+  2
+);
 var congty = new CongTy();
 congty.ThemNhanVien(nhanVienMoi);
 congty.ThemNhanVien(nhanVienMoi1);
+congty.ThemNhanVien(nhanVienMoi3);
 
 //Hàm gọi model popup: Thêm nhân veien hoặc sửa thông tin nhân viên
 
@@ -30,17 +40,18 @@ GoiModal = (modal_title, readonly = false, type = 1) => {
   switch (type) {
     case 1: //Thêm nhân viên
       {
-        getEle('btnThemNV').style.display = "block";
-        getEle('btnCapNhat').style.display = "none";
+        getEle("btnThemNV").style.display = "block";
+        getEle("btnCapNhat").style.display = "none";
       }
       break;
 
-    case 2: {
-      //Sửa thông tin nhân viên
-      getEle("btnThemNV").style.display = "none";
-      getEle("btnCapNhat").style.display = "block";
-    }
-    break;
+    case 2:
+      {
+        //Sửa thông tin nhân viên
+        getEle("btnThemNV").style.display = "none";
+        getEle("btnCapNhat").style.display = "block";
+      }
+      break;
   }
 };
 
@@ -72,11 +83,12 @@ HienThiDanhSach = (dsnv) => {
 
     let a = document.createElement("a");
     a.setAttribute("class", "page-link");
-    a.setAttribute("id", "trang " + i);
+    a.setAttribute("id", "trang_" + i);
     a.innerHTML = i;
     li.appendChild(a);
 
     //Thiếu chức năng chuyển trang
+    ChuyenTrang("trang_"+ i);
   }
 
   let batDau = (trangHienTai - 1) * soDong;
@@ -94,10 +106,17 @@ HienThiDanhSach = (dsnv) => {
 
     for (let j = 0; j < nv.mangDoiChieu.length; j++) {
       td = document.createElement("td");
-      td.innerHTML = nv.mangDoiChieu[j]  === 1 ? "Sếp" :nv.mangDoiChieu[j]  === 2 ? "Trưởng phòng" : nv.mangDoiChieu[j]  === 3 ? "Nhân viên" : nv.mangDoiChieu[j] ;
+      td.innerHTML =
+        nv.mangDoiChieu[j] === 1
+          ? "Sếp"
+          : nv.mangDoiChieu[j] === 2
+          ? "Trưởng phòng"
+          : nv.mangDoiChieu[j] === 3
+          ? "Nhân viên"
+          : nv.mangDoiChieu[j];
       tr.appendChild(td);
     }
-    
+
     // let btnSua = '<a class="btn btn-primary text-white" data-toggle="modal" href="myModal" id="sua_"' + nv.maNV + '><em class="fa fa-pencil"></em></a>';
     let btnSua = `<a class="btn btn-primary text-white" data-toggle="modal" href="#myModal" id="sua_${nv.maNV}"><em class="fa fa-pencil"></em></a>`;
     let btnXoa = `<a class="btn btn-danger text-white ml-2" id="xoa_${nv.maNV}"><em class="fa fa-trash"></em></a>`;
@@ -110,91 +129,117 @@ HienThiDanhSach = (dsnv) => {
     //Tạo sự kiện cho btnSua và btnXoa
     SuaNhanVien("sua_" + nv.maNV);
   }
-}
+};
 
-getEle('btnThem').addEventListener('click', () => { 
-    XoaForm();
-    GoiModal("THÊM NGƯỜI DÙNG");
-})
+getEle("btnThem").addEventListener("click", () => {
+  XoaForm();
+  GoiModal("THÊM NGƯỜI DÙNG");
+});
 
-getEle('btnThemNV').addEventListener('click', () => {
-    //validation
+getEle("btnThemNV").addEventListener("click", () => {
+  //validation
 
-    let maNV = getEle('msnv').value;
-    let hoTen = getEle('name').value;
-    let email = getEle('email').value;
-    let matKhau = getEle('password').value;
-    let ngayLamViec = getEle('datepicker').value;
-    let chucVu = getEle('chucvu').selectedIndex;
+  let maNV = getEle("msnv").value;
+  let hoTen = getEle("name").value;
+  let email = getEle("email").value;
+  let matKhau = getEle("password").value;
+  let ngayLamViec = getEle("datepicker").value;
+  let chucVu = getEle("chucvu").selectedIndex;
 
-    //Khởi tạo nhân viên mới
-    let nhanVienMoi = new NhanVien(maNV, hoTen, email, matKhau, ngayLamViec, chucVu);
-    congty.ThemNhanVien(nhanVienMoi);
+  //Khởi tạo nhân viên mới
+  let nhanVienMoi = new NhanVien(
+    maNV,
+    hoTen,
+    email,
+    matKhau,
+    ngayLamViec,
+    chucVu
+  );
+  congty.ThemNhanVien(nhanVienMoi);
 
-    swal("THÊM THÀNH CÔNG", "Danh sách nhân viên đã được cập nhật", "success");
+  swal("THÊM THÀNH CÔNG", "Danh sách nhân viên đã được cập nhật", "success");
 
-    HienThiDanhSach(congty.danhSachNhanVien);
-})
+  HienThiDanhSach(congty.danhSachNhanVien);
+});
 
-SuaNhanVien = idButton => {
-    getEle(idButton).addEventListener('click', ()=> {
-        let id = idButton;
-        let mangTam = id.split("_");
-        let maNV = mangTam[1];
+SuaNhanVien = (idButton) => {
+  getEle(idButton).addEventListener("click", () => {
+    let id = idButton;
+    let mangTam = id.split("_");
+    let maNV = mangTam[1];
 
-        let nhanVien = congty.TimNhanVienTheoMa(maNV);
+    let nhanVien = congty.TimNhanVienTheoMa(maNV);
 
-        getEle('msnv').value = maNV;
-        getEle('name').value = nhanVien.hoTen;
-        getEle('email').value = nhanVien.email;
-        getEle('password').value = nhanVien.matKhau;
-        getEle('datepicker').value = nhanVien.ngayLamViec;
-        getEle('chucvu').selectedIndex = nhanVien.chucVu;
+    getEle("msnv").value = maNV;
+    getEle("name").value = nhanVien.hoTen;
+    getEle("email").value = nhanVien.email;
+    getEle("password").value = nhanVien.matKhau;
+    getEle("datepicker").value = nhanVien.ngayLamViec;
+    getEle("chucvu").selectedIndex = nhanVien.chucVu;
 
-        GoiModal("CẬP NHẬT THÔNG TIN", true, 2);
-    })
-}
+    GoiModal("CẬP NHẬT THÔNG TIN", true, 2);
+  });
+};
 
-getEle('btnCapNhat').addEventListener('click', () =>{
-    let maNV = getEle('msnv').value;
-    let hoTen = getEle('name').value;
-    let email = getEle('email').value;
-    let matKhau = getEle('password').value;
-    let ngayLamViec = getEle('datepicker').value;
-    let chucVu = getEle('chucvu').selectedIndex;
+getEle("btnCapNhat").addEventListener("click", () => {
+  let maNV = getEle("msnv").value;
+  let hoTen = getEle("name").value;
+  let email = getEle("email").value;
+  let matKhau = getEle("password").value;
+  let ngayLamViec = getEle("datepicker").value;
+  let chucVu = getEle("chucvu").selectedIndex;
 
-    let nhanVienMoi = new NhanVien(maNV, hoTen, email, matKhau, ngayLamViec, chucVu);
+  let nhanVienMoi = new NhanVien(
+    maNV,
+    hoTen,
+    email,
+    matKhau,
+    ngayLamViec,
+    chucVu
+  );
 
-    congty.SuaNhanVien(nhanVienMoi);
-    swal("SỬA THÔNGTIN THÀNH CÔNG", "Danh sách nhân viên đã được cập nhật", "success");
-    HienThiDanhSach(congty.danhSachNhanVien);
-})
+  congty.SuaNhanVien(nhanVienMoi);
+  swal(
+    "SỬA THÔNGTIN THÀNH CÔNG",
+    "Danh sách nhân viên đã được cập nhật",
+    "success"
+  );
+  HienThiDanhSach(congty.danhSachNhanVien);
+});
 
 // Tim nhan vien theo ten
-getEle('searchName').addEventListener('keyup', () => {
-  let tuKhoa = getEle('searchName').value;
+getEle("searchName").addEventListener("keyup", () => {
+  let tuKhoa = getEle("searchName").value;
   let dskq = congty.TimNhanVienTheoTen(tuKhoa);
 
   HienThiDanhSach(dskq.danhSachNhanVien);
-})
+});
 
 //Sap xep nhan vien
-getEle('SapXepTang').addEventListener('click', ()=>{
-  getEle('SapXepTang').style.display = "none";
-  getEle('SapXepGiam').style.display = "inline";
+getEle("SapXepTang").addEventListener("click", () => {
+  getEle("SapXepTang").style.display = "none";
+  getEle("SapXepGiam").style.display = "inline";
   congty.SapXepNhanVien(1);
   HienThiDanhSach(congty.danhSachNhanVien);
+});
 
-})
-
-getEle('SapXepGiam').addEventListener('click', ()=>{
-  getEle('SapXepGiam').style.display = "none";
-  getEle('SapXepTang').style.display = "inline";
+getEle("SapXepGiam").addEventListener("click", () => {
+  getEle("SapXepGiam").style.display = "none";
+  getEle("SapXepTang").style.display = "inline";
   congty.SapXepNhanVien(-1);
   HienThiDanhSach(congty.danhSachNhanVien);
+});
+//Chuyen trang
+ChuyenTrang = (idButton) => {
+  document.getElementById(idButton).addEventListener("click", () => {
+    let id = idButton;
+    let mangTam = id.split("_");
+    trangHienTai = mangTam[1];
+    HienThiDanhSach(congty.danhSachNhanVien);
+  });
 
-})
-
+  
+};
 
 //Hiển thị dnah sách ra ngoài man hình
 HienThiDanhSach(congty.danhSachNhanVien);
